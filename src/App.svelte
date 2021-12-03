@@ -6,18 +6,20 @@
 
 	export let name;
  	let numOfPeople = 5
+ 	let numOfCompanies = 0
+ 	let numOfArticles = 0
  	let timer;
 
- 	onMount(async () => {
-		await fejkStore.loadPeople(numOfPeople)
+ 	onMount(() => {
+		handleChange(numOfPeople, 'people');
 	})
 
- 	const handleChange = async val => {
+ 	const handleChange = (val, entity) => {
 		clearTimeout(timer);
-		timer = setTimeout(async () => {
+		timer = setTimeout(() => {
 			numOfPeople = val
-			if (val > 0) {
-				await fejkStore.loadPeople(val)
+			if (val > 0 && entity === 'people') {
+				fejkStore.loadPeople(val)
 			}
 		}, 250)
 	}
@@ -34,11 +36,23 @@
 			<Loader />
 		</div>
 	{:else}
-		<section class="flex flex-row mx-auto">
-			<div class="mx-auto">
+		<section class="flex flex-row flex-wrap mx-auto">
+			<div class="m-4 p-2">
 		<label>
-			<p>Antal personer</p>
-			<input type=range value={numOfPeople} min=0 max=10 on:change={(e) => handleChange(e.target.value)}>
+			<p>Antal personer: {numOfPeople}</p>
+			<input type=range value={numOfPeople} min=0 max=10 on:change={(e) => handleChange(e.target.value, 'people')}>
+		</label>
+			</div>
+			<div class="m-4 p-2">
+		<label>
+			<p>Antal företag: {numOfCompanies}</p>
+			<input type=range value={numOfCompanies} min=0 max=10 on:change={(e) => handleChange(e.target.value, 'companies')}>
+		</label>
+			</div>
+			<div class="m-4 p-2">
+		<label>
+			<p>Antal artiklar: {numOfArticles}</p>
+			<input type=range value={numOfArticles} min=0 max=10 on:change={(e) => handleChange(e.target.value, 'articles')}>
 		</label>
 			</div>
 		</section>

@@ -1,8 +1,10 @@
 import { writable, derived } from 'svelte/store';
-import { getPeople } from '../shared/fejk.service'
+import { getCompanies, getPeople } from '../shared/fejk.service'
 
 const initialState = {
   people: [],
+  companies: [],
+  articles: [],
   isLoading: false,
   error: '',
 }
@@ -16,14 +18,38 @@ function createFejkStore() {
       update(state => (state = { ...state, isLoading: true }))
       try {
         const res = (await getPeople(amount));
-        console.log(res)
         update(state => (state = { ...state, people: res }))
       } catch (e) {
         alert(e.message)
       } finally {
         update(state => (state = { ...state, isLoading: false }))
       }
+    },
+    loadCompanies: async (amount = 0) => {
+      const { update } = writable(initialState)
+      update(state => (state = { ...state, isLoading: true }))
+      try {
+        const res = (await getCompanies(amount));
+        update(state => (state = { ...state, companies: res }))
+      } catch (e) {
+        alert(e.message)
+      } finally {
+        update(state => (state = { ...state, isLoading: false }))
+      }
+    },
+    loadArticles: async (amount = 0) => {
+      const { update } = writable(initialState)
+      update(state => (state = { ...state, isLoading: true }))
+      try {
+        const res = (await getArticles(amount));
+        update(state => (state = { ...state, articles: res }))
+      } catch (e) {
+        alert(e.message)
+      } finally {
+        update(state => (state = { ...state, isLoading: false }))
+      }
     }
+    ,
   }
 }
 
